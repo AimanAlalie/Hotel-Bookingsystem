@@ -1,0 +1,18 @@
+# Agent OS Standards Index
+
+api:
+  auth-check:
+    description: Authentication pattern for protected API routes
+  error-responses:
+    description: Error format and HTTP status codes for API responses
+  response-conventions:
+    description: Response format conventions for each HTTP method
+
+css:
+  styling-approach:
+    description: Use Tailwind CSS exclusively, no custom CSS files
+
+global:
+  tech-stack:
+    description: Project tech stack - React, Next.js, Supabase, Tailwind CSS
+

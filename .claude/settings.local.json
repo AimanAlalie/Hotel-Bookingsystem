@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(~/agent-os/scripts/project-install.sh:*)",
+      "Bash(bash:*)",
+      "Bash(tac:*)",
+      "WebFetch(domain:buildermethods.com)",
+      "Bash(npm install:*)",
+      "Bash(npm run build:*)",
+      "Bash(npm ls:*)",
+      "Bash(npm uninstall:*)",
+      "Bash(npm run dev:*)",
+      "Bash(curl:*)",
+      "WebFetch(domain:lovable.dev)",
+      "WebFetch(domain:c6dbfe0c-00ca-4f3b-bd77-1da9edc2aa22.lovableproject.com)",
+      "WebFetch(domain:localhost)",
+      "WebSearch",
+      "WebFetch(domain:unsplash.com)"
+    ]
+  }
+}
