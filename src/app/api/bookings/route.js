@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 import { sendBookingConfirmation } from '@/lib/email'
+import { isAdmin, forbiddenResponse } from '@/lib/auth'
 
 // GET /api/bookings - Get bookings (user's own or all for admin)
 export async function GET(request) {
@@ -10,6 +11,16 @@ export async function GET(request) {
   const all = searchParams.get('all') === 'true'
 
   const { data: { user } } = await supabase.auth.getUser()
+
+  // If requesting all bookings, require admin privileges
+  if (all) {
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+    if (!isAdmin(user)) {
+      return forbiddenResponse()
+    }
+  }
 
   let query = supabase
     .from('bookings')

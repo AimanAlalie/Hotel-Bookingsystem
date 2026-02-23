@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
+import { isAdmin, forbiddenResponse, unauthorizedResponse } from '@/lib/auth'
 
 // GET /api/bookings/[id] - Get a single booking
 export async function GET(request, { params }) {
@@ -31,14 +32,17 @@ export async function GET(request, { params }) {
   return NextResponse.json(data)
 }
 
-// PUT /api/bookings/[id] - Update a booking
+// PUT /api/bookings/[id] - Update a booking (admin only)
 export async function PUT(request, { params }) {
   const supabase = await createClient()
   const { id } = await params
 
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    return unauthorizedResponse()
+  }
+  if (!isAdmin(user)) {
+    return forbiddenResponse()
   }
 
   const body = await request.json()
@@ -69,14 +73,17 @@ export async function PUT(request, { params }) {
   return NextResponse.json(data)
 }
 
-// DELETE /api/bookings/[id] - Cancel/delete a booking
+// DELETE /api/bookings/[id] - Cancel/delete a booking (admin only)
 export async function DELETE(request, { params }) {
   const supabase = await createClient()
   const { id } = await params
 
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    return unauthorizedResponse()
+  }
+  if (!isAdmin(user)) {
+    return forbiddenResponse()
   }
 
   const { error } = await supabase

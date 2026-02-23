@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
+import { isAdmin, forbiddenResponse, unauthorizedResponse } from '@/lib/auth'
 
 // GET /api/rooms/[id] - Get a single room
 export async function GET(request, { params }) {
@@ -34,7 +35,10 @@ export async function PUT(request, { params }) {
 
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    return unauthorizedResponse()
+  }
+  if (!isAdmin(user)) {
+    return forbiddenResponse()
   }
 
   const body = await request.json()
@@ -61,7 +65,10 @@ export async function DELETE(request, { params }) {
 
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    return unauthorizedResponse()
+  }
+  if (!isAdmin(user)) {
+    return forbiddenResponse()
   }
 
   const { error } = await supabase
