@@ -34,18 +34,24 @@ export async function PUT(request, { params }) {
   }
 
   const body = await request.json()
-  const { name, city, description, image_url } = body
+  const { name, name_en, name_ar, city, description, description_en, description_ar, image_url } = body
+
+  console.log('Updating hotel:', id)
+  console.log('Body received:', { name, name_en, name_ar, city, description, description_en, description_ar, image_url })
 
   const { data, error } = await supabase
     .from('hotels')
-    .update({ name, city, description, image_url })
+    .update({ name, name_en, name_ar, city, description, description_en, description_ar, image_url })
     .eq('id', id)
     .select()
     .single()
 
   if (error) {
+    console.error('Supabase error:', error)
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
+
+  console.log('Update successful:', data)
 
   return NextResponse.json(data)
 }

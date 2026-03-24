@@ -13,7 +13,15 @@ export default function AdminRoomsPage() {
 
   const [showModal, setShowModal] = useState(false)
   const [editingRoom, setEditingRoom] = useState(null)
-  const [formData, setFormData] = useState({ hotel_id: '', name: '', price: '', capacity: '', image_url: '' })
+  const [formData, setFormData] = useState({
+    hotel_id: '',
+    name: '',
+    name_en: '',
+    name_ar: '',
+    price: '',
+    capacity: '',
+    image_url: ''
+  })
   const [imageFile, setImageFile] = useState(null)
   const [imagePreview, setImagePreview] = useState(null)
   const [saving, setSaving] = useState(false)
@@ -46,7 +54,15 @@ export default function AdminRoomsPage() {
 
   function openCreateModal() {
     setEditingRoom(null)
-    setFormData({ hotel_id: hotels[0]?.id || '', name: '', price: '', capacity: '', image_url: '' })
+    setFormData({
+      hotel_id: hotels[0]?.id || '',
+      name: '',
+      name_en: '',
+      name_ar: '',
+      price: '',
+      capacity: '',
+      image_url: ''
+    })
     setImageFile(null)
     setImagePreview(null)
     setShowModal(true)
@@ -57,6 +73,8 @@ export default function AdminRoomsPage() {
     setFormData({
       hotel_id: room.hotel_id || '',
       name: room.name || '',
+      name_en: room.name_en || room.name || '',
+      name_ar: room.name_ar || '',
       price: room.price?.toString() || '',
       capacity: room.capacity?.toString() || '',
       image_url: room.image_url || ''
@@ -69,7 +87,15 @@ export default function AdminRoomsPage() {
   function closeModal() {
     setShowModal(false)
     setEditingRoom(null)
-    setFormData({ hotel_id: '', name: '', price: '', capacity: '', image_url: '' })
+    setFormData({
+      hotel_id: '',
+      name: '',
+      name_en: '',
+      name_ar: '',
+      price: '',
+      capacity: '',
+      image_url: ''
+    })
     setImageFile(null)
     setImagePreview(null)
   }
@@ -115,6 +141,7 @@ export default function AdminRoomsPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...formData,
+          name: formData.name_en || formData.name, // Use English as default
           price: parseFloat(formData.price),
           capacity: parseInt(formData.capacity, 10),
           image_url: imageUrl
@@ -183,8 +210,11 @@ export default function AdminRoomsPage() {
         <tbody>
           {rooms.map((room) => (
             <tr key={room.id}>
-              <td>{room.name}</td>
-              <td>{room.hotels?.name || '-'}</td>
+              <td>
+                {room.name_en || room.name}
+                {room.name_ar && <div style={{ fontSize: '12px', color: '#666' }}>{room.name_ar}</div>}
+              </td>
+              <td>{room.hotels?.name_en || room.hotels?.name || '-'}</td>
               <td>{room.price} €</td>
               <td>{room.capacity} {t('admin.persons')}</td>
               <td className={styles.actions}>
@@ -204,7 +234,7 @@ export default function AdminRoomsPage() {
 
       {showModal && (
         <div className={styles.modalOverlay} onClick={closeModal}>
-          <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+          <div className={styles.modal} onClick={(e) => e.stopPropagation()} style={{ maxWidth: '500px' }}>
             <h2>{editingRoom ? t('admin.editRoom') : t('admin.createRoom')}</h2>
 
             <form onSubmit={handleSubmit}>
@@ -219,22 +249,37 @@ export default function AdminRoomsPage() {
                   <option value="">-- {t('admin.selectHotel')} --</option>
                   {hotels.map((hotel) => (
                     <option key={hotel.id} value={hotel.id}>
-                      {hotel.name} ({hotel.city})
+                      {hotel.name_en || hotel.name} ({hotel.city})
                     </option>
                   ))}
                 </select>
               </div>
 
-              <div className="form-group">
-                <label>{t('admin.roomName')}:</label>
-                <input
-                  type="text"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  required
-                  disabled={saving}
-                />
-              </div>
+              <fieldset style={{ border: '1px solid #ddd', padding: '15px', marginBottom: '15px', borderRadius: '5px' }}>
+                <legend style={{ fontWeight: 'bold', padding: '0 10px' }}>{t('admin.translations')}</legend>
+
+                <div className="form-group" style={{ marginBottom: '10px' }}>
+                  <label>{t('admin.nameEnglish')}:</label>
+                  <input
+                    type="text"
+                    value={formData.name_en}
+                    onChange={(e) => setFormData({ ...formData, name_en: e.target.value })}
+                    required
+                    disabled={saving}
+                  />
+                </div>
+
+                <div className="form-group" style={{ marginBottom: '0' }}>
+                  <label>{t('admin.nameArabic')}:</label>
+                  <input
+                    type="text"
+                    value={formData.name_ar}
+                    onChange={(e) => setFormData({ ...formData, name_ar: e.target.value })}
+                    disabled={saving}
+                    dir="rtl"
+                  />
+                </div>
+              </fieldset>
 
               <div className="form-group">
                 <label>{t('admin.pricePerNight')} (€):</label>

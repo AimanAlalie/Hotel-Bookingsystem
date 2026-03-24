@@ -4,10 +4,12 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useAuth } from '@/components/providers/AuthProvider'
+import { useLanguage } from '@/components/providers/LanguageProvider'
 
 export default function BookingPage() {
   const router = useRouter()
   const { user } = useAuth()
+  const { t } = useLanguage()
 
   const [hotel, setHotel] = useState(null)
   const [room, setRoom] = useState(null)
@@ -44,12 +46,12 @@ export default function BookingPage() {
     setError('')
 
     if (!firstname || !lastname || !email || !checkIn || !checkOut) {
-      setError('Bitte füllen Sie alle Felder aus.')
+      setError(t('booking.fillAllFields'))
       return
     }
 
     if (checkOut <= checkIn) {
-      setError('Check-out muss nach Check-in sein.')
+      setError(t('booking.checkOutAfterCheckIn'))
       return
     }
 
@@ -73,9 +75,9 @@ export default function BookingPage() {
 
       if (!response.ok) {
         if (response.status === 409) {
-          setError('Dieses Zimmer ist im gewählten Zeitraum leider nicht verfügbar.')
+          setError(t('booking.roomNotAvailable'))
         } else {
-          setError(data.error || 'Buchung fehlgeschlagen.')
+          setError(data.error || t('booking.bookingFailed'))
         }
         return
       }
@@ -97,7 +99,7 @@ export default function BookingPage() {
 
       router.push('/booking/confirmation')
     } catch (err) {
-      setError('Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.')
+      setError(t('booking.errorOccurred'))
     } finally {
       setLoading(false)
     }
@@ -106,7 +108,7 @@ export default function BookingPage() {
   if (!hotel || !room) {
     return (
       <div className="container">
-        <p>Laden...</p>
+        <p>{t('booking.loading')}</p>
       </div>
     )
   }
@@ -114,10 +116,10 @@ export default function BookingPage() {
   return (
     <div className="container">
       <Link href={`/hotel/${hotel.id}`} className="back-link">
-        ← Zurück
+        ← {t('booking.back')}
       </Link>
 
-      <h1>Buchung</h1>
+      <h1>{t('booking.title')}</h1>
 
       <div style={{
         backgroundColor: '#f5f5f5',
@@ -125,17 +127,17 @@ export default function BookingPage() {
         borderRadius: '5px',
         marginBottom: '20px'
       }}>
-        <p><strong>Hotel:</strong> {hotel.name}</p>
-        <p><strong>Zimmer:</strong> {room.name}</p>
-        <p><strong>Preis:</strong> {room.price} € pro Nacht</p>
+        <p><strong>{t('booking.hotel')}:</strong> {hotel.name}</p>
+        <p><strong>{t('booking.room')}:</strong> {room.name}</p>
+        <p><strong>{t('booking.price')}:</strong> {room.price} € {t('hotel.perNight')}</p>
       </div>
 
-      <h2>Ihre Daten</h2>
+      <h2>{t('booking.yourDetails')}</h2>
 
       {error && <p className="error">{error}</p>}
 
       <div className="form-group">
-        <label>Vorname:</label>
+        <label>{t('booking.firstName')}:</label>
         <input
           type="text"
           value={firstname}
@@ -146,7 +148,7 @@ export default function BookingPage() {
       </div>
 
       <div className="form-group">
-        <label>Nachname:</label>
+        <label>{t('booking.lastName')}:</label>
         <input
           type="text"
           value={lastname}
@@ -157,7 +159,7 @@ export default function BookingPage() {
       </div>
 
       <div className="form-group">
-        <label>Email:</label>
+        <label>{t('booking.email')}:</label>
         <input
           type="email"
           value={email}
@@ -168,7 +170,7 @@ export default function BookingPage() {
       </div>
 
       <div className="form-group">
-        <label>Check-in:</label>
+        <label>{t('booking.checkIn')}:</label>
         <input
           type="date"
           value={checkIn}
@@ -179,7 +181,7 @@ export default function BookingPage() {
       </div>
 
       <div className="form-group">
-        <label>Check-out:</label>
+        <label>{t('booking.checkOut')}:</label>
         <input
           type="date"
           value={checkOut}
@@ -195,7 +197,7 @@ export default function BookingPage() {
         className="btn btn-success"
         style={{ marginTop: '10px' }}
       >
-        {loading ? 'Bitte warten...' : 'Jetzt buchen'}
+        {loading ? t('booking.pleaseWait') : t('booking.bookNow')}
       </button>
     </div>
   )

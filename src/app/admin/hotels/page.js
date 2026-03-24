@@ -12,7 +12,16 @@ export default function AdminHotelsPage() {
 
   const [showModal, setShowModal] = useState(false)
   const [editingHotel, setEditingHotel] = useState(null)
-  const [formData, setFormData] = useState({ name: '', city: '', description: '', image_url: '' })
+  const [formData, setFormData] = useState({
+    name: '',
+    name_en: '',
+    name_ar: '',
+    city: '',
+    description: '',
+    description_en: '',
+    description_ar: '',
+    image_url: ''
+  })
   const [imageFile, setImageFile] = useState(null)
   const [imagePreview, setImagePreview] = useState(null)
   const [saving, setSaving] = useState(false)
@@ -36,7 +45,16 @@ export default function AdminHotelsPage() {
 
   function openCreateModal() {
     setEditingHotel(null)
-    setFormData({ name: '', city: '', description: '', image_url: '' })
+    setFormData({
+      name: '',
+      name_en: '',
+      name_ar: '',
+      city: '',
+      description: '',
+      description_en: '',
+      description_ar: '',
+      image_url: ''
+    })
     setImageFile(null)
     setImagePreview(null)
     setShowModal(true)
@@ -46,8 +64,12 @@ export default function AdminHotelsPage() {
     setEditingHotel(hotel)
     setFormData({
       name: hotel.name || '',
+      name_en: hotel.name_en || hotel.name || '',
+      name_ar: hotel.name_ar || '',
       city: hotel.city || '',
       description: hotel.description || '',
+      description_en: hotel.description_en || hotel.description || '',
+      description_ar: hotel.description_ar || '',
       image_url: hotel.image_url || ''
     })
     setImageFile(null)
@@ -58,7 +80,16 @@ export default function AdminHotelsPage() {
   function closeModal() {
     setShowModal(false)
     setEditingHotel(null)
-    setFormData({ name: '', city: '', description: '', image_url: '' })
+    setFormData({
+      name: '',
+      name_en: '',
+      name_ar: '',
+      city: '',
+      description: '',
+      description_en: '',
+      description_ar: '',
+      image_url: ''
+    })
     setImageFile(null)
     setImagePreview(null)
   }
@@ -96,13 +127,21 @@ export default function AdminHotelsPage() {
         }
       }
 
+      // Use English name as default name for backwards compatibility
+      const dataToSend = {
+        ...formData,
+        name: formData.name_en || formData.name,
+        description: formData.description_en || formData.description,
+        image_url: imageUrl
+      }
+
       const url = editingHotel ? `/api/hotels/${editingHotel.id}` : '/api/hotels'
       const method = editingHotel ? 'PUT' : 'POST'
 
       const res = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...formData, image_url: imageUrl })
+        body: JSON.stringify(dataToSend)
       })
 
       if (!res.ok) {
@@ -162,9 +201,12 @@ export default function AdminHotelsPage() {
         <tbody>
           {hotels.map((hotel) => (
             <tr key={hotel.id}>
-              <td>{hotel.name}</td>
+              <td>
+                {hotel.name_en || hotel.name}
+                {hotel.name_ar && <div style={{ fontSize: '12px', color: '#666' }}>{hotel.name_ar}</div>}
+              </td>
               <td>{hotel.city}</td>
-              <td>{hotel.description?.substring(0, 50)}...</td>
+              <td>{(hotel.description_en || hotel.description)?.substring(0, 50)}...</td>
               <td className={styles.actions}>
                 <button onClick={() => openEditModal(hotel)} className="btn btn-secondary">
                   {t('admin.edit')}
@@ -182,21 +224,10 @@ export default function AdminHotelsPage() {
 
       {showModal && (
         <div className={styles.modalOverlay} onClick={closeModal}>
-          <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+          <div className={styles.modal} onClick={(e) => e.stopPropagation()} style={{ maxWidth: '600px' }}>
             <h2>{editingHotel ? t('admin.editHotel') : t('admin.createHotel')}</h2>
 
             <form onSubmit={handleSubmit}>
-              <div className="form-group">
-                <label>{t('admin.name')}:</label>
-                <input
-                  type="text"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  required
-                  disabled={saving}
-                />
-              </div>
-
               <div className="form-group">
                 <label>{t('admin.city')}:</label>
                 <input
@@ -208,15 +239,54 @@ export default function AdminHotelsPage() {
                 />
               </div>
 
-              <div className="form-group">
-                <label>{t('admin.description')}:</label>
-                <textarea
-                  value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  rows={4}
-                  disabled={saving}
-                />
-              </div>
+              <fieldset style={{ border: '1px solid #ddd', padding: '15px', marginBottom: '15px', borderRadius: '5px' }}>
+                <legend style={{ fontWeight: 'bold', padding: '0 10px' }}>{t('admin.translations')}</legend>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
+                  <div className="form-group" style={{ marginBottom: '10px' }}>
+                    <label>{t('admin.nameEnglish')}:</label>
+                    <input
+                      type="text"
+                      value={formData.name_en}
+                      onChange={(e) => setFormData({ ...formData, name_en: e.target.value })}
+                      required
+                      disabled={saving}
+                    />
+                  </div>
+
+                  <div className="form-group" style={{ marginBottom: '10px' }}>
+                    <label>{t('admin.nameArabic')}:</label>
+                    <input
+                      type="text"
+                      value={formData.name_ar}
+                      onChange={(e) => setFormData({ ...formData, name_ar: e.target.value })}
+                      disabled={saving}
+                      dir="rtl"
+                    />
+                  </div>
+
+                  <div className="form-group" style={{ marginBottom: '0' }}>
+                    <label>{t('admin.descriptionEnglish')}:</label>
+                    <textarea
+                      value={formData.description_en}
+                      onChange={(e) => setFormData({ ...formData, description_en: e.target.value })}
+                      rows={3}
+                      disabled={saving}
+                    />
+                  </div>
+
+                  <div className="form-group" style={{ marginBottom: '0' }}>
+                    <label>{t('admin.descriptionArabic')}:</label>
+                    <textarea
+                      value={formData.description_ar}
+                      onChange={(e) => setFormData({ ...formData, description_ar: e.target.value })}
+                      rows={3}
+                      disabled={saving}
+                      dir="rtl"
+                    />
+                  </div>
+                </div>
+              </fieldset>
 
               <div className="form-group">
                 <label>{t('admin.uploadImage')}:</label>

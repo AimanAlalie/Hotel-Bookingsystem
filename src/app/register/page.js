@@ -4,11 +4,13 @@ import { useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
+import { useLanguage } from '@/components/providers/LanguageProvider'
 
 export default function RegisterPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const redirect = searchParams.get('redirect') || '/'
+  const { t } = useLanguage()
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -24,12 +26,12 @@ export default function RegisterPage() {
     setError('')
 
     if (password !== passwordConfirm) {
-      setError('Passwörter stimmen nicht überein.')
+      setError(t('auth.passwordMismatch'))
       return
     }
 
     if (password.length < 6) {
-      setError('Passwort muss mindestens 6 Zeichen haben.')
+      setError(t('auth.passwordMinLength'))
       return
     }
 
@@ -43,7 +45,7 @@ export default function RegisterPage() {
     setLoading(false)
 
     if (authError) {
-      setError('Registrierung fehlgeschlagen. ' + authError.message)
+      setError(t('auth.registrationFailed') + ' ' + authError.message)
     } else {
       setSuccess(true)
     }
@@ -53,18 +55,18 @@ export default function RegisterPage() {
     return (
       <div className="container" style={{ maxWidth: '400px', textAlign: 'center' }}>
         <Link href="/" className="back-link">
-          ← Zurück
+          ← {t('auth.back')}
         </Link>
 
-        <h1 style={{ color: '#28a745' }}>Registrierung erfolgreich!</h1>
-        <p>Bitte überprüfen Sie Ihre Email und klicken Sie auf den Bestätigungslink.</p>
+        <h1 style={{ color: '#28a745' }}>{t('auth.registrationSuccess')}</h1>
+        <p>{t('auth.checkEmail')}</p>
 
         <p style={{ marginTop: '20px' }}>
           <Link
             href={`/login${redirect !== '/' ? `?redirect=${redirect}` : ''}`}
             style={{ color: '#007bff' }}
           >
-            Zum Login
+            {t('auth.toLogin')}
           </Link>
         </p>
       </div>
@@ -74,16 +76,16 @@ export default function RegisterPage() {
   return (
     <div className="container" style={{ maxWidth: '400px' }}>
       <Link href="/" className="back-link">
-        ← Zurück
+        ← {t('auth.back')}
       </Link>
 
-      <h1>Registrieren</h1>
+      <h1>{t('auth.register')}</h1>
 
       {error && <p className="error">{error}</p>}
 
       <form onSubmit={handleRegister}>
         <div className="form-group">
-          <label>Email:</label>
+          <label>{t('auth.email')}:</label>
           <input
             type="email"
             value={email}
@@ -94,7 +96,7 @@ export default function RegisterPage() {
         </div>
 
         <div className="form-group">
-          <label>Passwort:</label>
+          <label>{t('auth.password')}:</label>
           <input
             type="password"
             value={password}
@@ -105,7 +107,7 @@ export default function RegisterPage() {
         </div>
 
         <div className="form-group">
-          <label>Passwort bestätigen:</label>
+          <label>{t('auth.confirmPassword')}:</label>
           <input
             type="password"
             value={passwordConfirm}
@@ -121,17 +123,17 @@ export default function RegisterPage() {
           className="btn btn-success"
           style={{ width: '100%' }}
         >
-          {loading ? 'Wird geladen...' : 'Registrieren'}
+          {loading ? t('auth.loading') : t('auth.registerButton')}
         </button>
       </form>
 
       <p style={{ marginTop: '20px', textAlign: 'center' }}>
-        Bereits ein Konto?{' '}
+        {t('auth.hasAccount')}{' '}
         <Link
           href={`/login${redirect !== '/' ? `?redirect=${redirect}` : ''}`}
           style={{ color: '#007bff' }}
         >
-          Jetzt anmelden
+          {t('auth.loginNow')}
         </Link>
       </p>
     </div>

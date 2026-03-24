@@ -5,7 +5,12 @@ import Image from 'next/image'
 import { useLanguage } from '@/components/providers/LanguageProvider'
 
 export default function FeaturedHotels({ hotels }) {
-  const { t } = useLanguage()
+  const { t, language } = useLanguage()
+
+  // Helper function to get localized hotel name
+  const getHotelName = (hotel) => {
+    return language === 'ar' && hotel.name_ar ? hotel.name_ar : (hotel.name_en || hotel.name)
+  }
 
   if (!hotels || hotels.length === 0) return null
 
@@ -19,7 +24,7 @@ export default function FeaturedHotels({ hotels }) {
               {hotel.image_url ? (
                 <Image
                   src={hotel.image_url}
-                  alt={hotel.name}
+                  alt={getHotelName(hotel)}
                   fill
                   className="object-cover transition-transform duration-300 group-hover:scale-105"
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -45,7 +50,7 @@ export default function FeaturedHotels({ hotels }) {
               </div>
 
               {/* Hotel name */}
-              <h3 className="font-heading text-lg font-bold text-gray-900 mb-3 line-clamp-1">{hotel.name}</h3>
+              <h3 className="font-heading text-lg font-bold text-gray-900 mb-3 line-clamp-1">{getHotelName(hotel)}</h3>
 
               {/* Amenity icons */}
               <div className="flex items-center gap-4 mb-4 text-gray-400">

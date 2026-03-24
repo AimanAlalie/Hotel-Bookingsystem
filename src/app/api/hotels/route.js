@@ -36,7 +36,7 @@ export async function POST(request) {
   }
 
   const body = await request.json()
-  const { name, city, description, image_url } = body
+  const { name, name_en, name_ar, city, description, description_en, description_ar, image_url } = body
 
   if (!name || !city) {
     return NextResponse.json({ error: 'Name and city are required' }, { status: 400 })
@@ -44,7 +44,7 @@ export async function POST(request) {
 
   const { data, error } = await supabase
     .from('hotels')
-    .insert([{ name, city, description, image_url }])
+    .insert([{ name, name_en, name_ar, city, description, description_en, description_ar, image_url }])
     .select()
     .single()
 

@@ -4,11 +4,13 @@ import { useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
+import { useLanguage } from '@/components/providers/LanguageProvider'
 
 export default function LoginPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const redirect = searchParams.get('redirect') || '/'
+  const { t } = useLanguage()
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -30,7 +32,7 @@ export default function LoginPage() {
     setLoading(false)
 
     if (authError) {
-      setError('Login fehlgeschlagen. Bitte überprüfen Sie Ihre Daten.')
+      setError(t('auth.loginFailed'))
       return
     }
 
@@ -41,16 +43,16 @@ export default function LoginPage() {
   return (
     <div className="container" style={{ maxWidth: '400px' }}>
       <Link href="/" className="back-link">
-        ← Zurück
+        ← {t('auth.back')}
       </Link>
 
-      <h1>Anmelden</h1>
+      <h1>{t('auth.login')}</h1>
 
       {error && <p className="error">{error}</p>}
 
       <form onSubmit={handleLogin}>
         <div className="form-group">
-          <label>Email:</label>
+          <label>{t('auth.email')}:</label>
           <input
             type="email"
             value={email}
@@ -61,7 +63,7 @@ export default function LoginPage() {
         </div>
 
         <div className="form-group">
-          <label>Passwort:</label>
+          <label>{t('auth.password')}:</label>
           <input
             type="password"
             value={password}
@@ -77,17 +79,17 @@ export default function LoginPage() {
           className="btn btn-primary"
           style={{ width: '100%' }}
         >
-          {loading ? 'Wird geladen...' : 'Anmelden'}
+          {loading ? t('auth.loading') : t('auth.loginButton')}
         </button>
       </form>
 
       <p style={{ marginTop: '20px', textAlign: 'center' }}>
-        Noch kein Konto?{' '}
+        {t('auth.noAccount')}{' '}
         <Link
           href={`/register${redirect !== '/' ? `?redirect=${redirect}` : ''}`}
           style={{ color: '#007bff' }}
         >
-          Jetzt registrieren
+          {t('auth.registerNow')}
         </Link>
       </p>
     </div>

@@ -6,8 +6,18 @@ import { createClient } from '@/lib/supabase/client'
 const AuthContext = createContext({
   user: null,
   loading: true,
+  isAdmin: false,
   signOut: async () => {},
 })
+
+function checkIsAdmin(user) {
+  if (!user?.email) return false
+  const adminEmails = (process.env.NEXT_PUBLIC_ADMIN_EMAILS || '')
+    .split(',')
+    .map(e => e.trim())
+    .filter(e => e.length > 0)
+  return adminEmails.includes(user.email)
+}
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
@@ -38,8 +48,10 @@ export function AuthProvider({ children }) {
     setUser(null)
   }
 
+  const isAdmin = checkIsAdmin(user)
+
   return (
-    <AuthContext.Provider value={{ user, loading, signOut }}>
+    <AuthContext.Provider value={{ user, loading, isAdmin, signOut }}>
       {children}
     </AuthContext.Provider>
   )

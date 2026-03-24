@@ -8,7 +8,8 @@
     "hotels": "Hotels",
     "about": "About",
     "bookNow": "Book Now",
-    "signIn": "Sign In"
+    "signIn": "Sign In",
+    "admin": "Admin"
   },
   "home": {
     "title": "Hotel Booking System",
@@ -41,6 +42,7 @@
     "featuredSubtitle": "From boutique heritage hotels to modern luxury resorts, find the perfect stay for your Yemen adventure.",
     "viewDetails": "View Details",
     "perNight": "/ night",
+    "aboutLabel": "WHY CHOOSE US",
     "aboutTitle": "Why Choose YemenStay",
     "aboutSubtitle": "We provide the best travel experience in Yemen",
     "aboutLocalExpertise": "Local Expertise",
@@ -51,7 +53,9 @@
     "aboutSupportDesc": "Our dedicated support team is available around the clock to assist you during your travels.",
     "wifi": "WiFi",
     "breakfast": "Breakfast",
-    "parking": "Parking"
+    "parking": "Parking",
+    "noDestinations": "No destinations available yet.",
+    "errorLoadingHotels": "Failed to load hotels."
   },
   "hotel": {
     "notFound": "Hotel not found",
@@ -218,7 +222,12 @@
     "confirmDeleteBooking": "Really delete this booking?",
     "errorOccurred": "An error occurred.",
     "uploadImage": "Upload Image",
-    "noImage": "No Image"
+    "noImage": "No Image",
+    "nameEnglish": "Name (English)",
+    "nameArabic": "Name (Arabic)",
+    "descriptionEnglish": "Description (English)",
+    "descriptionArabic": "Description (Arabic)",
+    "translations": "Translations"
   },
   "footer": {
     "description": "Your gateway to discovering Yemen's hidden treasures. We curate the finest accommodations for an unforgettable journey through Arabia Felix.",
@@ -240,5 +249,15 @@
   "common": {
     "currency": "EUR",
     "currencySymbol": "\u20ac"
+  },
+  "error": {
+    "title": "Something went wrong!",
+    "message": "An unexpected error occurred.",
+    "retry": "Try again"
+  },
+  "notFound": {
+    "title": "404 - Page not found",
+    "message": "The requested page does not exist.",
+    "backToHome": "Back to home"
   }
 }

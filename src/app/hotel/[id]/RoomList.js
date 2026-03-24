@@ -8,7 +8,12 @@ import { useLanguage } from '@/components/providers/LanguageProvider'
 export default function RoomList({ rooms, hotel }) {
   const router = useRouter()
   const { user } = useAuth()
-  const { t } = useLanguage()
+  const { t, language } = useLanguage()
+
+  // Helper function to get localized room name
+  const getRoomName = (room) => {
+    return language === 'ar' && room.name_ar ? room.name_ar : (room.name_en || room.name)
+  }
 
   const handleSelectRoom = (room) => {
     sessionStorage.setItem('selectedHotel', JSON.stringify(hotel))
@@ -34,7 +39,7 @@ export default function RoomList({ rooms, hotel }) {
             {room.image_url ? (
               <Image
                 src={room.image_url}
-                alt={room.name}
+                alt={getRoomName(room)}
                 fill
                 className="object-cover"
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -50,7 +55,7 @@ export default function RoomList({ rooms, hotel }) {
 
           {/* Room content */}
           <div className="p-5">
-            <h3 className="font-heading text-lg font-bold text-gray-900 mb-3">{room.name}</h3>
+            <h3 className="font-heading text-lg font-bold text-gray-900 mb-3">{getRoomName(room)}</h3>
 
             {/* Info row */}
             <div className="flex items-center gap-4 text-sm text-gray-500 mb-4">

@@ -3,9 +3,11 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { useLanguage } from '@/components/providers/LanguageProvider'
 
 export default function BookingConfirmationPage() {
   const router = useRouter()
+  const { t } = useLanguage()
   const [booking, setBooking] = useState(null)
 
   useEffect(() => {
@@ -21,7 +23,7 @@ export default function BookingConfirmationPage() {
   if (!booking) {
     return (
       <div className="container">
-        <p>Laden...</p>
+        <p>{t('booking.loading')}</p>
       </div>
     )
   }
@@ -32,10 +34,10 @@ export default function BookingConfirmationPage() {
         ✓
       </div>
 
-      <h1 style={{ color: '#28a745' }}>Buchung erfolgreich!</h1>
+      <h1 style={{ color: '#28a745' }}>{t('confirmation.title')}</h1>
 
-      <p>Vielen Dank, {booking.firstname} {booking.lastname}.</p>
-      <p>Eine Bestätigung wurde an <strong>{booking.email}</strong> gesendet.</p>
+      <p>{t('confirmation.thankYou')}, {booking.firstname} {booking.lastname}.</p>
+      <p>{t('confirmation.confirmationSent')} <strong>{booking.email}</strong>.</p>
 
       <div style={{
         backgroundColor: '#f5f5f5',
@@ -45,17 +47,17 @@ export default function BookingConfirmationPage() {
         margin: '30px auto',
         textAlign: 'left'
       }}>
-        <h3 style={{ marginTop: '0' }}>Buchungsdetails</h3>
-        <p><strong>Hotel:</strong> {booking.hotel.name}</p>
-        <p><strong>Stadt:</strong> {booking.hotel.city}</p>
-        <p><strong>Zimmer:</strong> {booking.room.name}</p>
-        <p><strong>Preis:</strong> {booking.room.price} € pro Nacht</p>
-        <p><strong>Check-in:</strong> {booking.checkIn}</p>
-        <p><strong>Check-out:</strong> {booking.checkOut}</p>
+        <h3 style={{ marginTop: '0' }}>{t('confirmation.bookingDetails')}</h3>
+        <p><strong>{t('confirmation.hotel')}:</strong> {booking.hotel.name}</p>
+        <p><strong>{t('confirmation.city')}:</strong> {booking.hotel.city}</p>
+        <p><strong>{t('confirmation.room')}:</strong> {booking.room.name}</p>
+        <p><strong>{t('confirmation.price')}:</strong> {booking.room.price} € {t('confirmation.perNight')}</p>
+        <p><strong>{t('confirmation.checkIn')}:</strong> {booking.checkIn}</p>
+        <p><strong>{t('confirmation.checkOut')}:</strong> {booking.checkOut}</p>
       </div>
 
       <Link href="/" className="btn btn-primary">
-        Zurück zur Startseite
+        {t('confirmation.backToHome')}
       </Link>
     </div>
   )

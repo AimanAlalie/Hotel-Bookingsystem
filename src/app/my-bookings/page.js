@@ -3,9 +3,11 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useAuth } from '@/components/providers/AuthProvider'
+import { useLanguage } from '@/components/providers/LanguageProvider'
 
 export default function MyBookingsPage() {
   const { user, loading: authLoading } = useAuth()
+  const { t, language } = useLanguage()
   const [bookings, setBookings] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -31,13 +33,13 @@ export default function MyBookingsPage() {
       const data = await response.json()
 
       if (!response.ok) {
-        setError('Buchungen konnten nicht geladen werden.')
+        setError(t('myBookings.errorLoading'))
         setBookings([])
       } else {
         setBookings(Array.isArray(data) ? data : [])
       }
     } catch (err) {
-      setError('Ein Fehler ist aufgetreten.')
+      setError(t('myBookings.errorOccurred'))
       setBookings([])
     } finally {
       setLoading(false)
@@ -71,11 +73,11 @@ export default function MyBookingsPage() {
     setError('')
 
     if (!editCheckIn || !editCheckOut) {
-      setError('Bitte Check-in und Check-out ausfüllen.')
+      setError(t('myBookings.fillCheckInOut'))
       return
     }
     if (editCheckOut <= editCheckIn) {
-      setError('Check-out muss nach Check-in sein.')
+      setError(t('myBookings.checkOutAfterCheckIn'))
       return
     }
 
@@ -92,7 +94,7 @@ export default function MyBookingsPage() {
       })
 
       if (!response.ok) {
-        setError('Änderung fehlgeschlagen.')
+        setError(t('myBookings.updateFailed'))
         return
       }
 
@@ -104,14 +106,14 @@ export default function MyBookingsPage() {
 
       cancelEdit()
     } catch (err) {
-      setError('Ein Fehler ist aufgetreten.')
+      setError(t('myBookings.errorOccurred'))
     } finally {
       setSaving(false)
     }
   }
 
   async function cancelBooking(bookingId) {
-    const ok = window.confirm('Möchten Sie diese Buchung wirklich stornieren?')
+    const ok = window.confirm(t('myBookings.confirmCancel'))
     if (!ok) return
 
     setError('')
@@ -123,7 +125,7 @@ export default function MyBookingsPage() {
       })
 
       if (!response.ok) {
-        setError('Stornierung fehlgeschlagen.')
+        setError(t('myBookings.cancelFailed'))
         return
       }
 
@@ -133,7 +135,7 @@ export default function MyBookingsPage() {
         cancelEdit()
       }
     } catch (err) {
-      setError('Ein Fehler ist aufgetreten.')
+      setError(t('myBookings.errorOccurred'))
     } finally {
       setSaving(false)
     }
@@ -142,7 +144,7 @@ export default function MyBookingsPage() {
   if (authLoading || loading) {
     return (
       <div className="container">
-        <p>Buchungen werden geladen...</p>
+        <p>{t('myBookings.loadingBookings')}</p>
       </div>
     )
   }
@@ -150,15 +152,15 @@ export default function MyBookingsPage() {
   return (
     <div className="container">
       <Link href="/" className="back-link">
-        ← Zurück zur Startseite
+        ← {t('myBookings.backToHome')}
       </Link>
 
-      <h1>Meine Buchungen</h1>
+      <h1>{t('myBookings.title')}</h1>
 
       {error && <p className="error">{error}</p>}
 
       {bookings.length === 0 ? (
-        <p>Sie haben noch keine Buchungen.</p>
+        <p>{t('myBookings.noBookings')}</p>
       ) : (
         bookings.map((booking) => {
           const hotelName = booking.rooms?.hotels?.name || 'Hotel'
@@ -170,7 +172,7 @@ export default function MyBookingsPage() {
           const total = nights && typeof price === 'number' ? nights * price : null
 
           const createdAtText = booking.created_at
-            ? new Date(booking.created_at).toLocaleDateString('de-DE')
+            ? new Date(booking.created_at).toLocaleDateString(language === 'ar' ? 'ar-SA' : 'de-DE')
             : null
 
           const isEditing = editingId === booking.id
@@ -178,20 +180,20 @@ export default function MyBookingsPage() {
           return (
             <div key={booking.id} className="card p-5 mb-4">
               <h3>{hotelName}</h3>
-              <p><strong>Stadt:</strong> {city}</p>
-              <p><strong>Zimmer:</strong> {roomName}</p>
-              <p><strong>Preis:</strong> {price ?? '-'} € pro Nacht</p>
+              <p><strong>{t('myBookings.city')}:</strong> {city}</p>
+              <p><strong>{t('myBookings.room')}:</strong> {roomName}</p>
+              <p><strong>{t('myBookings.price')}:</strong> {price ?? '-'} € {t('myBookings.perNight')}</p>
 
               {!isEditing ? (
                 <>
-                  <p><strong>Check-in:</strong> {booking.check_in}</p>
-                  <p><strong>Check-out:</strong> {booking.check_out}</p>
+                  <p><strong>{t('myBookings.checkIn')}:</strong> {booking.check_in}</p>
+                  <p><strong>{t('myBookings.checkOut')}:</strong> {booking.check_out}</p>
                 </>
               ) : (
                 <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginTop: '10px' }}>
                   <div>
                     <label style={{ display: 'block', marginBottom: 4 }}>
-                      <strong>Check-in</strong>
+                      <strong>{t('myBookings.checkIn')}</strong>
                     </label>
                     <input
                       type="date"
@@ -204,7 +206,7 @@ export default function MyBookingsPage() {
 
                   <div>
                     <label style={{ display: 'block', marginBottom: 4 }}>
-                      <strong>Check-out</strong>
+                      <strong>{t('myBookings.checkOut')}</strong>
                     </label>
                     <input
                       type="date"
@@ -217,12 +219,12 @@ export default function MyBookingsPage() {
                 </div>
               )}
 
-              {nights && <p><strong>Nächte:</strong> {nights}</p>}
-              {total !== null && <p><strong>Gesamtpreis:</strong> {total} €</p>}
+              {nights && <p><strong>{t('myBookings.nights')}:</strong> {nights}</p>}
+              {total !== null && <p><strong>{t('myBookings.totalPrice')}:</strong> {total} €</p>}
 
               {createdAtText && (
                 <p style={{ color: '#666', fontSize: '14px' }}>
-                  Gebucht am: {createdAtText}
+                  {t('myBookings.bookedOn')}: {createdAtText}
                 </p>
               )}
 
@@ -234,7 +236,7 @@ export default function MyBookingsPage() {
                       disabled={saving}
                       className="btn btn-secondary"
                     >
-                      Ändern
+                      {t('myBookings.edit')}
                     </button>
 
                     <button
@@ -242,7 +244,7 @@ export default function MyBookingsPage() {
                       disabled={saving}
                       className="btn btn-danger"
                     >
-                      Stornieren
+                      {t('myBookings.cancel')}
                     </button>
                   </>
                 ) : (
@@ -252,14 +254,14 @@ export default function MyBookingsPage() {
                       disabled={saving}
                       className="btn btn-success"
                     >
-                      {saving ? 'Speichert...' : 'Speichern'}
+                      {saving ? t('myBookings.saving') : t('myBookings.save')}
                     </button>
                     <button
                       onClick={cancelEdit}
                       disabled={saving}
                       className="btn btn-secondary"
                     >
-                      Abbrechen
+                      {t('myBookings.cancelEdit')}
                     </button>
                   </>
                 )}
