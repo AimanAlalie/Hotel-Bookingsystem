@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import Link from 'next/link'
 import { useAuth } from '@/components/providers/AuthProvider'
 import { useLanguage } from '@/components/providers/LanguageProvider'
@@ -17,14 +17,7 @@ export default function MyBookingsPage() {
   const [editCheckOut, setEditCheckOut] = useState('')
   const [saving, setSaving] = useState(false)
 
-  useEffect(() => {
-    if (authLoading) return
-    if (!user) return
-
-    fetchBookings()
-  }, [user, authLoading])
-
-  async function fetchBookings() {
+  const fetchBookings = useCallback(async () => {
     setLoading(true)
     setError('')
 
@@ -38,13 +31,20 @@ export default function MyBookingsPage() {
       } else {
         setBookings(Array.isArray(data) ? data : [])
       }
-    } catch (err) {
+    } catch {
       setError(t('myBookings.errorOccurred'))
       setBookings([])
     } finally {
       setLoading(false)
     }
-  }
+  }, [t])
+
+  useEffect(() => {
+    if (authLoading) return
+    if (!user) return
+
+    fetchBookings()
+  }, [user, authLoading, fetchBookings])
 
   function calcNights(checkIn, checkOut) {
     if (!checkIn || !checkOut) return null

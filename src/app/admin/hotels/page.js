@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import styles from '../admin.module.css'
 import { useLanguage } from '@/components/providers/LanguageProvider'
 
@@ -26,22 +26,22 @@ export default function AdminHotelsPage() {
   const [imagePreview, setImagePreview] = useState(null)
   const [saving, setSaving] = useState(false)
 
-  useEffect(() => {
-    fetchHotels()
-  }, [])
-
-  async function fetchHotels() {
+  const fetchHotels = useCallback(async () => {
     setLoading(true)
     try {
       const res = await fetch('/api/hotels')
       const data = await res.json()
       setHotels(Array.isArray(data) ? data : [])
-    } catch (err) {
+    } catch {
       setError(t('admin.errorLoadingHotels'))
     } finally {
       setLoading(false)
     }
-  }
+  }, [t])
+
+  useEffect(() => {
+    fetchHotels()
+  }, [fetchHotels])
 
   function openCreateModal() {
     setEditingHotel(null)
@@ -297,6 +297,7 @@ export default function AdminHotelsPage() {
                   disabled={saving}
                 />
                 {imagePreview && (
+                  /* eslint-disable-next-line @next/next/no-img-element */
                   <img
                     src={imagePreview}
                     alt="Preview"

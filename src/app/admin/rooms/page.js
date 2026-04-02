@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import styles from '../admin.module.css'
 import { useLanguage } from '@/components/providers/LanguageProvider'
 
@@ -26,31 +26,31 @@ export default function AdminRoomsPage() {
   const [imagePreview, setImagePreview] = useState(null)
   const [saving, setSaving] = useState(false)
 
-  useEffect(() => {
-    Promise.all([fetchRooms(), fetchHotels()])
-  }, [])
-
-  async function fetchRooms() {
+  const fetchRooms = useCallback(async () => {
     try {
       const res = await fetch('/api/rooms')
       const data = await res.json()
       setRooms(Array.isArray(data) ? data : [])
-    } catch (err) {
+    } catch {
       setError(t('admin.errorLoadingRooms'))
     } finally {
       setLoading(false)
     }
-  }
+  }, [t])
 
-  async function fetchHotels() {
+  const fetchHotelsData = useCallback(async () => {
     try {
       const res = await fetch('/api/hotels')
       const data = await res.json()
       setHotels(Array.isArray(data) ? data : [])
-    } catch (err) {
+    } catch {
       console.error('Failed to load hotels')
     }
-  }
+  }, [])
+
+  useEffect(() => {
+    Promise.all([fetchRooms(), fetchHotelsData()])
+  }, [fetchRooms, fetchHotelsData])
 
   function openCreateModal() {
     setEditingRoom(null)
@@ -315,6 +315,7 @@ export default function AdminRoomsPage() {
                   disabled={saving}
                 />
                 {imagePreview && (
+                  /* eslint-disable-next-line @next/next/no-img-element */
                   <img
                     src={imagePreview}
                     alt="Preview"

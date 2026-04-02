@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import styles from '../admin.module.css'
 import { useLanguage } from '@/components/providers/LanguageProvider'
 
@@ -21,22 +21,22 @@ export default function AdminBookingsPage() {
   })
   const [saving, setSaving] = useState(false)
 
-  useEffect(() => {
-    fetchBookings()
-  }, [])
-
-  async function fetchBookings() {
+  const fetchBookings = useCallback(async () => {
     setLoading(true)
     try {
       const res = await fetch('/api/bookings?all=true')
       const data = await res.json()
       setBookings(Array.isArray(data) ? data : [])
-    } catch (err) {
+    } catch {
       setError(t('admin.errorLoadingBookings'))
     } finally {
       setLoading(false)
     }
-  }
+  }, [t])
+
+  useEffect(() => {
+    fetchBookings()
+  }, [fetchBookings])
 
   function openEditModal(booking) {
     setEditingBooking(booking)
