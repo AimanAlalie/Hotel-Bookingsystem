@@ -259,5 +259,14 @@
     "title": "404 - الصفحة غير موجودة",
     "message": "الصفحة المطلوبة غير موجودة.",
     "backToHome": "العودة إلى الرئيسية"
+  },
+  "search": {
+    "title": "نتائج البحث",
+    "foundRooms": "{{count}} غرفة متاحة",
+    "noResults": "لا توجد غرف متاحة",
+    "tryDifferentFilters": "حاول تعديل فلاتر البحث أو التواريخ",
+    "updateResults": "تحديث",
+    "upToGuests": "حتى {{count}} ضيوف",
+    "totalFor": "{{nights}} ليالي:"
   }
 }

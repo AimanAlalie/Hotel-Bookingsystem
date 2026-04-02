@@ -32,6 +32,12 @@ export default function BookingPage() {
 
     setHotel(JSON.parse(storedHotel))
     setRoom(JSON.parse(storedRoom))
+
+    // Pre-fill dates from search if available
+    const searchCheckIn = sessionStorage.getItem('searchCheckIn')
+    const searchCheckOut = sessionStorage.getItem('searchCheckOut')
+    if (searchCheckIn) setCheckIn(searchCheckIn)
+    if (searchCheckOut) setCheckOut(searchCheckOut)
   }, [router])
 
   useEffect(() => {

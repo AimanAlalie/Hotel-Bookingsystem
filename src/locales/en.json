@@ -259,5 +259,14 @@
     "title": "404 - Page not found",
     "message": "The requested page does not exist.",
     "backToHome": "Back to home"
+  },
+  "search": {
+    "title": "Search Results",
+    "foundRooms": "{{count}} rooms available",
+    "noResults": "No rooms available",
+    "tryDifferentFilters": "Try adjusting your search filters or dates",
+    "updateResults": "Update",
+    "upToGuests": "Up to {{count}} guests",
+    "totalFor": "{{nights}} nights:"
   }
 }

@@ -198,6 +198,7 @@ export default function Navigation() {
                 {t('nav.bookNow')}
               </Link>
             </div>
+            
           </div>
         </div>
       )}

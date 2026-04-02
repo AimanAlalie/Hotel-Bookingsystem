@@ -39,20 +39,24 @@ export function LanguageProvider({ children }) {
     }
   }
 
-  const t = (key) => {
-    const keys = key.split('.')
-    let value = translations[language]
+  const t = (key, vars = {}) => {
+  const keys = key.split('.')
+  let value = translations[language]
 
-    for (const k of keys) {
-      if (value && typeof value === 'object' && k in value) {
-        value = value[k]
-      } else {
-        return key
-      }
+  for (const k of keys) {
+    if (value && typeof value === 'object' && k in value) {
+      value = value[k]
+    } else {
+      return key
     }
-
-    return typeof value === 'string' ? value : key
   }
+
+  if (typeof value !== 'string') return key
+
+  return Object.entries(vars).reduce((str, [varKey, varValue]) => {
+    return str.replace(new RegExp(`{{\\s*${varKey}\\s*}}`, 'g'), String(varValue))
+  }, value)
+}
 
   const isRTL = language === 'ar'
 

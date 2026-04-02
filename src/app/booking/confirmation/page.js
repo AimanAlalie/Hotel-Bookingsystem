@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useLanguage } from '@/components/providers/LanguageProvider'
 
+
 export default function BookingConfirmationPage() {
   const router = useRouter()
   const { t } = useLanguage()
@@ -12,13 +13,18 @@ export default function BookingConfirmationPage() {
 
   useEffect(() => {
     const data = sessionStorage.getItem('bookingData')
-    if (!data) {
+    if (!data) { 
       router.push('/')
       return
     }
     setBooking(JSON.parse(data))
-    sessionStorage.removeItem('bookingData')
+    //sessionStorage.removeItem('bookingData')
   }, [router])
+  const handelBooking =  () => {
+  sessionStorage.removeItem('bookingData')
+  router.push('/')
+
+}
 
   if (!booking) {
     return (
@@ -56,9 +62,10 @@ export default function BookingConfirmationPage() {
         <p><strong>{t('confirmation.checkOut')}:</strong> {booking.checkOut}</p>
       </div>
 
-      <Link href="/" className="btn btn-primary">
+  
+      <button onClick={handelBooking} className='btn btn-secondary'>
         {t('confirmation.backToHome')}
-      </Link>
+      </button>
     </div>
   )
 }
