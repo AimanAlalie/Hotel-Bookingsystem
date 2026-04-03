@@ -28,17 +28,18 @@ export default async function HomePage() {
     rooms: undefined,
   }))
 
-  // Get unique cities with hotel counts
+  // Get unique cities with hotel counts (only show top 3 cities)
+  const allowedCities = ["Sana'a", "Aden", "Taiz"]
   const cityMap = {}
   allHotels.forEach(h => {
-    if (h.city) {
+    if (h.city && allowedCities.includes(h.city)) {
       cityMap[h.city] = (cityMap[h.city] || 0) + 1
     }
   })
   const destinations = Object.entries(cityMap)
     .map(([city, count]) => ({ city, count }))
     .sort((a, b) => b.count - a.count)
-    .slice(0, 4)
+    .slice(0, 3)
 
   const cities = [...new Set(allHotels.map(h => h.city).filter(Boolean))]
 

@@ -22,7 +22,7 @@ export default function RoomList({ rooms, hotel }) {
     if (user) {
       router.push('/booking')
     } else {
-      router.push('/booking/confirmation')
+      router.push('/booking/checkout-choice')
     }
   }
 

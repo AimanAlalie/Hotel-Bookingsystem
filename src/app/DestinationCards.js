@@ -8,7 +8,6 @@ const DESTINATION_IMAGES = {
   "Sanaa": 'https://images.unsplash.com/photo-1578895101408-1a36b834405b?w=600&h=400&fit=crop',
   "Aden": 'https://images.unsplash.com/photo-1518623489648-a173ef7824f3?w=600&h=400&fit=crop',
   "Taiz": 'https://images.unsplash.com/photo-1466442929976-97f336a657be?w=600&h=400&fit=crop',
-  "Mukalla": 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&h=400&fit=crop',
 }
 
 export default function DestinationCards({ destinations }) {

@@ -4,10 +4,12 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
+import { useAuth } from '@/components/providers/AuthProvider'
 import { useLanguage } from '@/components/providers/LanguageProvider'
 
 export default function SearchResults({ searchParams }) {
   const { t, language } = useLanguage()
+  const { user } = useAuth()
   const router = useRouter()
   const [results, setResults] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -20,7 +22,7 @@ export default function SearchResults({ searchParams }) {
   const [guests, setGuests] = useState(searchParams?.guests || '2')
 
   // Cities for filter dropdown
-  const cities = ["Sana'a", "Aden", "Taiz", "Mukalla"]
+  const cities = ["Sana'a", "Aden", "Taiz"]
 
   // Today and min checkout for date inputs
   const today = new Date().toISOString().split('T')[0]
@@ -87,8 +89,12 @@ export default function SearchResults({ searchParams }) {
       sessionStorage.setItem('searchCheckOut', checkOut)
     }
 
-    // Navigate to booking flow (checkout-choice for guests, booking for logged in users)
-    router.push('/booking/checkout-choice')
+    // Navigate to booking flow (direct to booking if logged in, checkout-choice if not)
+    if (user) {
+      router.push('/booking')
+    } else {
+      router.push('/booking/checkout-choice')
+    }
   }
 
   // Calculate nights and total price

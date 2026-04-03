@@ -56,8 +56,6 @@ export default function Footer() {
               <li><span className="hover:text-brand transition-colors cursor-default">{t('footer.sanaa')}</span></li>
               <li><span className="hover:text-brand transition-colors cursor-default">{t('footer.aden')}</span></li>
               <li><span className="hover:text-brand transition-colors cursor-default">{t('footer.taiz')}</span></li>
-              <li><span className="hover:text-brand transition-colors cursor-default">{t('footer.mukalla')}</span></li>
-              <li><span className="hover:text-brand transition-colors cursor-default">{t('footer.hadramaut')}</span></li>
             </ul>
           </div>
 

@@ -32,7 +32,7 @@ export async function GET(request, { params }) {
   return NextResponse.json(data)
 }
 
-// PUT /api/bookings/[id] - Update a booking (admin only)
+// PUT /api/bookings/[id] - Update a booking (owner or admin)
 export async function PUT(request, { params }) {
   const supabase = await createClient()
   const { id } = await params
@@ -41,7 +41,20 @@ export async function PUT(request, { params }) {
   if (!user) {
     return unauthorizedResponse()
   }
-  if (!isAdmin(user)) {
+
+  // Check if user owns this booking or is admin
+  const { data: booking } = await supabase
+    .from('bookings')
+    .select('user_id')
+    .eq('id', id)
+    .single()
+
+  if (!booking) {
+    return NextResponse.json({ error: 'Booking not found' }, { status: 404 })
+  }
+
+  const isOwner = booking.user_id === user.id
+  if (!isOwner && !isAdmin(user)) {
     return forbiddenResponse()
   }
 
@@ -73,7 +86,7 @@ export async function PUT(request, { params }) {
   return NextResponse.json(data)
 }
 
-// DELETE /api/bookings/[id] - Cancel/delete a booking (admin only)
+// DELETE /api/bookings/[id] - Cancel/delete a booking (owner or admin)
 export async function DELETE(request, { params }) {
   const supabase = await createClient()
   const { id } = await params
@@ -82,7 +95,20 @@ export async function DELETE(request, { params }) {
   if (!user) {
     return unauthorizedResponse()
   }
-  if (!isAdmin(user)) {
+
+  // Check if user owns this booking or is admin
+  const { data: booking } = await supabase
+    .from('bookings')
+    .select('user_id')
+    .eq('id', id)
+    .single()
+
+  if (!booking) {
+    return NextResponse.json({ error: 'Booking not found' }, { status: 404 })
+  }
+
+  const isOwner = booking.user_id === user.id
+  if (!isOwner && !isAdmin(user)) {
     return forbiddenResponse()
   }
 
