@@ -260,6 +260,7 @@ export default function AdminHotelsPage() {
                       type="text"
                       value={formData.name_ar}
                       onChange={(e) => setFormData({ ...formData, name_ar: e.target.value })}
+                      required
                       disabled={saving}
                       dir="rtl"
                     />
@@ -271,6 +272,7 @@ export default function AdminHotelsPage() {
                       value={formData.description_en}
                       onChange={(e) => setFormData({ ...formData, description_en: e.target.value })}
                       rows={3}
+                      required
                       disabled={saving}
                     />
                   </div>
@@ -281,6 +283,7 @@ export default function AdminHotelsPage() {
                       value={formData.description_ar}
                       onChange={(e) => setFormData({ ...formData, description_ar: e.target.value })}
                       rows={3}
+                      required
                       disabled={saving}
                       dir="rtl"
                     />
@@ -294,6 +297,7 @@ export default function AdminHotelsPage() {
                   type="file"
                   accept="image/jpeg,image/png,image/webp,image/gif"
                   onChange={handleImageChange}
+                  required={!editingHotel}
                   disabled={saving}
                 />
                 {imagePreview && (

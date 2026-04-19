@@ -275,6 +275,7 @@ export default function AdminRoomsPage() {
                     type="text"
                     value={formData.name_ar}
                     onChange={(e) => setFormData({ ...formData, name_ar: e.target.value })}
+                    required
                     disabled={saving}
                     dir="rtl"
                   />
@@ -312,6 +313,7 @@ export default function AdminRoomsPage() {
                   type="file"
                   accept="image/jpeg,image/png,image/webp,image/gif"
                   onChange={handleImageChange}
+                  required={!editingRoom}
                   disabled={saving}
                 />
                 {imagePreview && (

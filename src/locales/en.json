@@ -158,7 +158,7 @@
     "loginNow": "Login now",
     "loginFailed": "Login failed. Please check your credentials.",
     "passwordMismatch": "Passwords do not match.",
-    "passwordMinLength": "Password must be at least 6 characters.",
+    "passwordMinLength": "Password must be at least 8 characters and contain uppercase, lowercase letters and a special character.",
     "registrationFailed": "Registration failed.",
     "registrationSuccess": "Registration successful!",
     "checkEmail": "Please check your email and click the confirmation link.",
