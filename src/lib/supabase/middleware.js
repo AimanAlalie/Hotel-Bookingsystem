@@ -31,7 +31,6 @@ export async function updateSession(request) {
     data: { user },
   } = await supabase.auth.getUser()
 
-  // Protected routes
   const protectedPaths = ['/my-bookings', '/admin']
   const isProtectedPath = protectedPaths.some(path =>
     request.nextUrl.pathname.startsWith(path)
@@ -44,7 +43,6 @@ export async function updateSession(request) {
     return NextResponse.redirect(url)
   }
 
-  // Admin routes - check if user is admin
   if (request.nextUrl.pathname.startsWith('/admin') && user) {
     const adminEmails = (process.env.ADMIN_EMAILS || '').split(',').map(e => e.trim())
     if (!adminEmails.includes(user.email)) {

@@ -75,7 +75,6 @@ export async function POST(request) {
     return NextResponse.json({ error: 'Check-out must be after check-in' }, { status: 400 })
   }
 
-  // Check for conflicts
   const { data: conflicts, error: conflictError } = await supabase
     .from('bookings')
     .select('id')
