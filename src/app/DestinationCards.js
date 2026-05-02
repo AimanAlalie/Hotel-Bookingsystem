@@ -8,8 +8,8 @@ const DESTINATION_IMAGES = {
     "https://images.unsplash.com/photo-1668896379676-c349528c9023?q=80&w=735&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   Sanaa:
     "https://images.unsplash.com/photo-1611907671216-7ec6ef949163?q=80&w=1134&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  Aden: "https://images.unsplash.com/photo-1518623489648-a173ef7824f3?w=600&h=400&fit=crop",
-  Taiz: "https://images.unsplash.com/photo-1466442929976-97f336a657be?w=600&h=400&fit=crop",
+  Aden: "https://images.unsplash.com/photo-1755020474967-36501de91d66?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  Taiz: "https://images.unsplash.com/photo-1624532144155-62077f290e3b?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
 };
 
 export default function DestinationCards({ destinations }) {

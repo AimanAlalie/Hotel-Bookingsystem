@@ -28,7 +28,11 @@
       "mcp__supabase__list_tables",
       "mcp__supabase__execute_sql",
       "Bash(pkill:*)",
-      "Bash(taskkill:*)"
+      "Bash(taskkill:*)",
+      "Bash(xcopy:*)",
+      "Bash(powershell:*)",
+      "Bash(git pull:*)",
+      "Bash(node:*)"
     ]
   }
 }
