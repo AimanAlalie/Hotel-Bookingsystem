@@ -4,11 +4,13 @@ import Image from 'next/image'
 import { useLanguage } from '@/components/providers/LanguageProvider'
 
 const DESTINATION_IMAGES = {
-  "Sana'a": 'https://images.unsplash.com/photo-1578895101408-1a36b834405b?w=600&h=400&fit=crop',
-  "Sanaa": 'https://images.unsplash.com/photo-1578895101408-1a36b834405b?w=600&h=400&fit=crop',
-  "Aden": 'https://images.unsplash.com/photo-1518623489648-a173ef7824f3?w=600&h=400&fit=crop',
-  "Taiz": 'https://images.unsplash.com/photo-1466442929976-97f336a657be?w=600&h=400&fit=crop',
-}
+  "Sana'a":
+    "https://images.unsplash.com/photo-1668896379676-c349528c9023?q=80&w=735&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  Sanaa:
+    "https://images.unsplash.com/photo-1611907671216-7ec6ef949163?q=80&w=1134&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  Aden: "https://images.unsplash.com/photo-1518623489648-a173ef7824f3?w=600&h=400&fit=crop",
+  Taiz: "https://images.unsplash.com/photo-1466442929976-97f336a657be?w=600&h=400&fit=crop",
+};
 
 export default function DestinationCards({ destinations }) {
   const { t } = useLanguage()

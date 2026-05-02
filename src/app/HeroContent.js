@@ -13,7 +13,8 @@ export default function HeroContent({ cities, hotelCount, cityCount }) {
       <div
         className="absolute inset-0 bg-cover bg-center"
         style={{
-          backgroundImage: "url('https://images.unsplash.com/photo-1578895101408-1a36b834405b?w=1920&q=80')",
+          backgroundImage:
+            "url('https://images.unsplash.com/photo-1611907671216-7ec6ef949163?q=80&w=1134&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')",
         }}
       />
       <div className="absolute inset-0 bg-black/50" />
